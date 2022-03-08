@@ -1,5 +1,4 @@
 <template>
-  <h1>Events For Good</h1>
   <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
   </div>
@@ -8,6 +7,7 @@
 <script>
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
+import EventService from '@/services/EventService.js'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -17,42 +17,17 @@ export default {
   },
   data() {
     return {
-      events: [
-        {
-          id: 5928101,
-          category: 'animal welfare',
-          title: 'Cat Adoption day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: 'true',
-          organizer: 'Kat Laydee',
-        },
-        {
-          id: 5928101,
-          category: 'animal welfare',
-          title: 'Cat Adoption day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: 'true',
-          organizer: 'Kat Laydee',
-        },
-        {
-          id: 5928101,
-          category: 'animal welfare',
-          title: 'Cat Adoption day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: 'true',
-          organizer: 'Kat Laydee',
-        },
-      ],
+      events: null,
     }
+  },
+  created() {
+    EventService.getEvents()
+      .then((response) => {
+        this.events = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
 }
 </script>
