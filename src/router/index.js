@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
-import EventService from '@/services/EventService'
-import GStore from '@/store'
+// import EventService from '@/services/EventService'
+
 import EventList from '@/views/EventList.vue'
 import EventLayout from '@/views/event/Layout.vue'
 import EventDetails from '@/views/event/Details.vue'
@@ -27,22 +27,22 @@ const routes = [
     props: true,
     component: EventLayout,
     redirect: { name: 'EventDetails' },
-    beforeEnter: (to) => {
-      return EventService.getEvent(to.params.id)
-        .then((response) => {
-          GStore.event = response.data
-        })
-        .catch((error) => {
-          if (error.response && error.response.status == 404) {
-            return {
-              name: '404Resource',
-              params: { resource: 'event' },
-            }
-          } else {
-            return { name: 'NetworkError' }
-          }
-        })
-    },
+    // beforeEnter: (to) => {
+    //   return EventService.getEvent(to.params.id)
+    //     .then((response) => {
+    //       GStore.event = response.data
+    //     })
+    //     .catch((error) => {
+    //       if (error.response && error.response.status == 404) {
+    //         return {
+    //           name: '404Resource',
+    //           params: { resource: 'event' },
+    //         }
+    //       } else {
+    //         return { name: 'NetworkError' }
+    //       }
+    //     })
+    // },
     children: [
       {
         path: '',
@@ -107,20 +107,21 @@ const router = createRouter({
   },
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(() => {
+  // add (to, from) for auth
   NProgress.start()
-  const notAuthorized = true //just for testing
-  if (to.meta.requireAuth && notAuthorized) {
-    GStore.flashMessage = 'Sorry, you are not authorized to view this page'
-    setTimeout(() => {
-      GStore.flashMessage = ''
-    }, 3000)
-    if (from.href) {
-      return false
-    } else {
-      return { path: '/' }
-    }
-  }
+  // const notAuthorized = true //just for testing
+  // if (to.meta.requireAuth && notAuthorized) {
+  //   GStore.flashMessage = 'Sorry, you are not authorized to view this page'
+  //   setTimeout(() => {
+  //     GStore.flashMessage = ''
+  //   }, 3000)
+  //   if (from.href) {
+  //     return false
+  //   } else {
+  //     return { path: '/' }
+  //   }
+  // }
 })
 router.afterEach(() => {
   NProgress.done()
